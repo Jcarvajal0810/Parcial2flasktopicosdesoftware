@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Factorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary: #06b6d4;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f6f7ff 0%, #e9eeff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+            color: var(--dark);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .content {
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .input-section {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background-color: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .result-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .result-card.success {
+            border-left: 5px solid var(--success);
+        }
+        
+        .result-card.error {
+            border-left: 5px solid var(--error);
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            color: var(--primary);
+        }
+        
+        .error .result-value {
+            color: var(--error);
+        }
+        
+        .info-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background-color: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .info-box i {
+            color: var(--primary);
+        }
+        
+        .url-example {
+            font-family: monospace;
+            background-color: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .math-symbol {
+            font-size: 1.5rem;
+            margin: 0 0.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 1rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .factorial-animation {
+            display: flex;
+            justify-content: center;
+            gap: 0.25rem;
+            margin: 1.5rem 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .factorial-animation span {
+            display: inline-block;
+            animation: bounce 1.5s infinite;
+            color: var(--primary);
+        }
+        
+        .factorial-animation span:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        
+        .factorial-animation span:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+        
+        .factorial-animation span:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        
+        .factorial-animation span:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .result-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-calculator"></i> Calculadora de Factorial</h1>
+            <p>Parcial 2</p>
+        </div>
+        
+        <div class="content">
+            {% if numero is defined %}
+                <div class="factorial-animation">
+                    {% for i in range(1, numero + 1) %}
+                        <span>{{ i }}</span>{% if i < numero %}<span class="math-symbol">×</span>{% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="factorial-animation">
+                    <span>n</span><span class="math-symbol">!</span>
+                </div>
+            {% endif %}
+            
+            <div class="result-card {% if error %}error{% else %}success{% endif %}">
+                <div class="result-value">
+                    {{ mensaje }}
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i>
+                <p>Para calcular otro factorial, cambia el número en la URL.</p>
+            </div>
+            
+            <div class="input-section">
+                <p>Ejemplo de URL:</p>
+                <p class="url-example">http://127.0.0.1:5000/factorial/5</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Desarrollado con <i class="fas fa-heart" style="color: #ef4444;"></i> usando Flask</p>
+    </div>
+</body>
+</html>
